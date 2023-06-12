@@ -95,9 +95,9 @@ def category(names):
         driver.implicitly_wait(60)
 
         # 책 분야 확인
-        book_category = driver.find_elements(By.CLASS_NAME, "btn_sub_depth")[2].text
+        book_category = driver.find_elements(By.CLASS_NAME, "btn_sub_depth")
+        book_category = book_category[len(book_category)-1].text
         book_categorys[name] = book_category
-        print(f"{name}의 분야: {book_category}")
     driver.close()
 
     return book_categorys
