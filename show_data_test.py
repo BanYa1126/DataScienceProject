@@ -1,13 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-import time
-import re
 import matplotlib.pyplot as plt
-import numpy as np
 import os
-import datetime
-import getpass
 from collections import Counter
 
 plt.rcParams['font.family'] = 'Malgun Gothic'
