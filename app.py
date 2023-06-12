@@ -1,15 +1,12 @@
 from flask import Flask, render_template, request, redirect
 
 from crawler import book_list
-from algorithm_test import recommand, category
-from DataProcessing import sha512_hash, listTostr, strTolist, now_time, generate_random_number
+from algorithm_test import category
+from DataProcessing import sha512_hash, listTostr, strTolist, now_time
+from show_data_test import show_data
 
 import sqlite3
 import time
-
-from image_crawling_test import save_images
-import os
-import cv2
 
 conn = sqlite3.connect("database/bookmate.db")
 cur = conn.cursor()
@@ -89,16 +86,15 @@ def inputData():
 
         # 저장 웹 페이지에 출력하기 위함, 데이터를 다시 코드, 이름, 저자의 형태로 변환
         user_book_info_list = strTolist(result[2])
-
-    recommand_list = []
-    for book_code in user_book_list:
-        result = cur.execute("SELECT * FROM Book WHERE BookCode = ?", (book_code,)).fetchone()
+    book_category = {}
+    for user_book_name in user_book_list:
+        result = cur.execute("SELECT * FROM Book WHERE BookName = ?", (user_book_name,)).fetchone()
         if result == None:
-            i = recommand(book_code)
-            recommand_list.append(i)
-            cur.execute("INSERT INTO Book (BookCode, BookLists) VALUES (?, ?)", (book_code, listTostr(i)))
+            book_category[user_book_name] = category(user_book_name)[user_book_name]
+            cur.execute("INSERT INTO Book (BookName, BookCategory) VALUES (?, ?)", (user_book_name, book_category[user_book_name]))
         else:
-            recommand_list.append(strTolist(result[1]))
+            book_category[user_book_name] = result[1]
+
     conn.commit() #오류 수정
     cur.close()
     conn.close()
@@ -106,7 +102,7 @@ def inputData():
     end_time = time.time() - start_time
     print("총 걸린 시간: {}초\n".format(end_time))
     # 코드가 정상적으로 작동하면 SearchResult.html 페이지에 책 리스트 출력
-    return render_template("SearchResult.html", bookinfos=user_book_info_list, student_number=id, re_books=recommand_list, loading_time=end_time)
+    return render_template("SearchResult.html", bookinfos=user_book_info_list, bookcategory=book_category, student_number=id, re_books="", loading_time=end_time)
 
 # 이스터 에그, html 연습용
 @app.route("/EarthAndMoon")
