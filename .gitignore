@@ -1,5 +1,7 @@
 # 가상환경 이름
 __library/
+
+show_data/
 person_info.txt
 test.py
 chromedriver.exe
