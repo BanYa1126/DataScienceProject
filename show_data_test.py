@@ -7,30 +7,7 @@ from collections import Counter
 
 plt.rcParams['font.family'] = 'Malgun Gothic'
 
-def save_data(names):
-    driver = webdriver.Chrome()
-    driver.get("https://www.kyobobook.co.kr/")
-    driver.implicitly_wait(60)
-    
-    categories = []
-    for name in names:
-        if name != "":
-            driver.find_elements(By.CLASS_NAME, "ip_gnb_search")[0].send_keys(name, Keys.ENTER)
-            driver.implicitly_wait(60)
-
-            driver.find_elements(By.CLASS_NAME, "prod_info")[0].click()
-            driver.implicitly_wait(60)
-
-            book_category = driver.find_elements(By.CLASS_NAME, "btn_sub_depth")[-1].text
-            categories.append(book_category)
-        else:
-            categories.append(None)
-    driver.quit()
-    return categories
-
-
-def show_data(names,id):
-    categories = save_data(names)
+def show_data(categories,id):
     p = []
     for row in categories:
         if row is not None:
@@ -54,7 +31,7 @@ def show_data(names,id):
     plt.pie(sizes, labels=labels, autopct='%.2f')
 
     # 사용자별 데이터 저장 폴더 생성
-    data_folder = os.path.join(os.getcwd(), 'show_data')  # 데이터 폴더 경로 생성
+    data_folder = os.path.join(os.getcwd(), 'static/show_data')  # 데이터 폴더 경로 생성
     os.makedirs(data_folder, exist_ok=True)  # 데이터 폴더 생성
 
     #아이디를 받아와야함
