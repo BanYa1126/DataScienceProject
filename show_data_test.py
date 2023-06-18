@@ -1,6 +1,3 @@
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
 import matplotlib.pyplot as plt
 import os
 from collections import Counter
@@ -42,4 +39,4 @@ def show_data(categories,id):
     save_path = os.path.join(data_folder, filename)
 
     # 그래프를 이미지 파일로 저장
-    plt.savefig(save_path)
+    plt.savefig(save_path, dpi=300)
