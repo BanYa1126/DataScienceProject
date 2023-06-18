@@ -54,6 +54,7 @@ def inputData():
 
     # 데이터베이스에 학번에 있는지 확인
     user_db_result = cur.execute("SELECT * FROM StudentsData WHERE StudentNumber = ?", (id,)).fetchone()
+    # print(f"user_db_result[-1]: {user_db_result[-1]}, now_time(): {now_time()}")
     if user_db_result == None:
         user_book_info_list = book_list(id=id, pw=pw, ReturnData=3)
         # 크롤링에 실패하면 홈으로 리다이렉트(크롤러는 작동 중 오류가 발생하면 0을 리턴)
@@ -61,6 +62,8 @@ def inputData():
             print("웹 페이지 로딩 오류")
             # 문제가 발생하면 홈으로 리다이렉트
             return redirect("/")
+
+
         elif user_book_info_list == 1:
             print("대출 기록이 없습니다.")
             cur.execute("INSERT INTO StudentsData (StudentNumber, HashPassword, BookList, CrawlingDate) VALUES (?, ?, ?, ?)", (id, sha512_hash(pw), listTostr(user_book_info_list), now_time()))
@@ -73,9 +76,21 @@ def inputData():
 
         # 책 이름만 저장
         user_book_list = [item[1] for item in user_book_info_list]
+
+
     elif user_db_result[1] != sha512_hash(pw):
         print(f"아이디: {id}에 대한 비밀번호가 틀렸습니다.")
         return redirect("/")
+
+
+    elif user_db_result[-1] != now_time():
+        print("책 대출 기록을 업데이트합니다.")
+        user_book_info_list = book_list(id=id, pw=pw, ReturnData=3)
+        user_book_list = [item[1] for item in user_book_info_list]
+        # cur.execute("INSERT INTO StudentsData (StudentNumber, HashPassword, BookList, CrawlingDate) VALUES (?, ?, ?, ?)", (id, sha512_hash(pw), listTostr(user_book_info_list), now_time()))
+        # conn.commit()
+
+
     else:
         user_book_info_list = []
         for book_name in strTolist(user_db_result[2]):
@@ -98,7 +113,7 @@ def inputData():
     if user_db_result == None:
         show_data(list(book_category.values()), id=id)
 
-    conn.commit() #오류 수정
+    conn.commit()
     cur.close()
     conn.close()
 
