@@ -17,7 +17,7 @@ def category(names): # 책 이름의 리스트를 받음
 
     with open('book_info.csv', 'w', encoding='utf-8-sig', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(['name', 'author', 'category'])
+        writer.writerow(['name', 'author', 'category', 'from'])
 
         for name in names:
             name_set = set() # 중복 체크를 위한 초기화
@@ -64,7 +64,7 @@ def category(names): # 책 이름의 리스트를 받음
                 author_name = author_element.text # 책 저자 크롤링
 
                 if book_name not in name_set: # 겹치는 이름이면 csv파일에 작성하지 않음
-                    writer.writerow([book_name, author_name, book_category])
+                    writer.writerow([book_name, author_name, book_category, name])
                     name_set.add(book_name)
         
     driver.close()
