@@ -9,8 +9,10 @@ import time
 # csv를 위한 모듈
 import csv
 
-# 책 카테고리를 알려주는 함수
-def category(names): # 책 이름의 리스트를 받음
+import random
+
+# 책 정보를 csv파일로 작성
+def category(names): 
     driver = webdriver.Chrome()
     driver.get("https://www.kyobobook.co.kr/")
     driver.implicitly_wait(60)
@@ -66,5 +68,23 @@ def category(names): # 책 이름의 리스트를 받음
                 if book_name not in name_set: # 겹치는 이름이면 csv파일에 작성하지 않음
                     writer.writerow([book_name, author_name, book_category, name])
                     name_set.add(book_name)
-        
-    driver.close()
+    driver.close()     
+
+# 책 이름으로 추천 책 출력
+def random_books(name):
+    with open("book_info.csv", 'r', encoding='utf-8-sig') as file:
+        reader = csv.reader(file)
+        header = next(reader)
+
+        books = list(reader)
+        random.shuffle(books)
+
+        ran_book_rec=[]
+        for book in books:
+            if book[3] == name:
+                if len(ran_book_rec) < 5:
+                    ran_book_rec.append(book[0])
+                if len(ran_book_rec) == 5:
+                    break
+
+    return ran_book_rec
