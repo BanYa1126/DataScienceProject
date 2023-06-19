@@ -7,6 +7,13 @@ from show_data_test import show_data
 
 import sqlite3
 import time
+import os
+
+try:
+    print("database 폴더 생성")
+    os.mkdir("database/")
+except:
+    print("database 폴더가 이미 존재합니다.")
 
 conn = sqlite3.connect("database/bookmate.db")
 cur = conn.cursor()
