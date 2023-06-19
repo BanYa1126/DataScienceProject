@@ -11,8 +11,8 @@ import csv
 
 import random
 
-# 책 카테고리를 알려주는 함수
-def category(names): # 책 이름의 리스트를 받음
+# 책 정보를 csv파일로 작성
+def category(names): 
     driver = webdriver.Chrome()
     driver.get("https://www.kyobobook.co.kr/")
     driver.implicitly_wait(60)
@@ -70,6 +70,7 @@ def category(names): # 책 이름의 리스트를 받음
                     name_set.add(book_name)
     driver.close()     
 
+# 책 이름으로 추천 책 출력
 def random_books(name):
     with open("book_info.csv", 'r', encoding='utf-8-sig') as file:
         reader = csv.reader(file)
@@ -87,20 +88,3 @@ def random_books(name):
                     break
 
     return ran_book_rec
-
-
-start = time.time()
-
-user_book_list = ['화학으로 이루어진 세상 ', '공간에 펼쳐진 힘의 무대 ', '시각예술 문화 읽기 ']
-print(user_book_list)
-
-try:
-    # 책 이름(user_book_list)을 이용해서 CSV 파일 생성
-    category(user_book_list)
-    print("category(user_book_list) 걸린 시간: {}".format(time.time() - start))
-    for word in user_book_list:
-        print("word: {}\n{}\n".format(word, random_books(word)))
-except:
-    print("오류 발생")
-
-print("총 걸린 시간: {}".format(time.time() - start))
