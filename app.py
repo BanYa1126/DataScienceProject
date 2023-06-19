@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect
 
 from crawler import book_list
-from algorithm_test import category
+from algorithm import user_book_category, random_books, category
 from DataProcessing import sha512_hash, listTostr, strTolist, now_time
 from show_data_test import show_data
 
@@ -112,7 +112,7 @@ def inputData():
     for user_book_name in user_book_list:
         book_db_result = cur.execute("SELECT * FROM Book WHERE BookName = ?", (user_book_name,)).fetchone()
         if book_db_result == None:
-            book_category[user_book_name] = category(user_book_name)[user_book_name]
+            book_category[user_book_name] = user_book_category(user_book_name)[user_book_name]
             cur.execute("INSERT INTO Book (BookName, BookCategory) VALUES (?, ?)", (user_book_name, book_category[user_book_name]))
         else:
             book_category[user_book_name] = book_db_result[1]
