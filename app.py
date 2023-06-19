@@ -82,13 +82,13 @@ def inputData():
         print(f"아이디: {id}에 대한 비밀번호가 틀렸습니다.")
         return redirect("/")
 
-
+    # 업데이트 날짜가 오늘이 아니면 업데이트
     elif user_db_result[-1] != now_time():
         print("책 대출 기록을 업데이트합니다.")
         user_book_info_list = book_list(id=id, pw=pw, ReturnData=3)
         user_book_list = [item[1] for item in user_book_info_list]
-        # cur.execute("INSERT INTO StudentsData (StudentNumber, HashPassword, BookList, CrawlingDate) VALUES (?, ?, ?, ?)", (id, sha512_hash(pw), listTostr(user_book_info_list), now_time()))
-        # conn.commit()
+        cur.execute("UPDATE StudentsData SET BookList = ?, CrawlingDate = ? WHERE StudentNumber = ?", (listTostr(user_book_info_list), now_time(), id))
+        conn.commit()
 
 
     else:
