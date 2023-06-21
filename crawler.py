@@ -2,6 +2,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+import urllib.request
 
 # 경로 설정을 위한 모듈
 import os
@@ -10,7 +11,7 @@ import os
 import time
 
 # 함수 작동 중 오류가 발생하면 0을 반환하고, 오류가 없으면 리스트를 반환
-def book_list(id, pw, ReturnData=1):
+def book_list(id, pw, ReturnData=2):
     # 전체 작동 시간 측정 시작부분
     start = time.time()
     try:
@@ -65,19 +66,35 @@ def book_list(id, pw, ReturnData=1):
         pass
 
     # 대출 기록 페이지로 이동
-    # driver.get("https://lib.deu.ac.kr/lend_lend.mir")
     driver.get("https://lib.deu.ac.kr/lend_mylist.mir")
-    # driver.implicitly_wait(60)
-    time.sleep(3)
+    driver.implicitly_wait(60)
 
     bookdatalist = []
     # 1 책 이름, 2 저자
     if ReturnData == 1:
         SeleniumBookList = driver.find_elements(By.CLASS_NAME, "text-left")[1:]
-        for onebook in SeleniumBookList:
-            tmp_list = onebook.text.split(" / ")
+        for BookName in SeleniumBookList:
+            tmp_list = BookName.text.split(" / ")
             tmp_list.insert(0, "0")
             bookdatalist.append(tmp_list)
+    # 책 이름, 저자, 이미지
+    if ReturnData == 2:
+        SeleniumBookList = driver.find_elements(By.CLASS_NAME, "text-left")[1:]
+        for BookName in SeleniumBookList:
+            tmp_list = BookName.text.split(" / ")
+            tmp_list.insert(0, "0")
+            bookdatalist.append(tmp_list)
+
+        for number in range(len(SeleniumBookList)):
+            driver.find_element(By.XPATH, f"/html/body/section/section/section/div[2]/form/div[3]/table/tbody/tr[{number + 1}]/td[1]/a").click()
+            driver.implicitly_wait(60)
+            img_url = driver.find_element(By.XPATH, '/html/body/section/section/section/div[2]/div[1]/form[1]/div/section/div/div/section/div[2]/div/div[2]/div/div/iframe').get_attribute('src')
+            driver.get(img_url)
+            img = driver.find_element(By.XPATH, "/html/body/table/tbody/tr[1]/td/a/img").get_attribute('src')
+            BookName = bookdatalist[number][1]
+            urllib.request.urlretrieve(img, f'static/images/{BookName}.jpg')
+            driver.get("https://lib.deu.ac.kr/lend_mylist.mir")
+            driver.implicitly_wait(60)
 
     # 크롬 드라이버 종료
     driver.close()

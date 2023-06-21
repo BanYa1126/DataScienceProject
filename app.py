@@ -63,7 +63,7 @@ def inputData():
     user_db_result = cur.execute("SELECT * FROM StudentsData WHERE StudentNumber = ?", (id,)).fetchone()
     # print(f"user_db_result[-1]: {user_db_result[-1]}, now_time(): {now_time()}")
     if user_db_result == None:
-        user_book_info_list = book_list(id=id, pw=pw)
+        user_book_info_list = book_list(id=id, pw=pw, ReturnData=2)
         print(user_book_info_list)
         # 크롤링에 실패하면 홈으로 리다이렉트(크롤러는 작동 중 오류가 발생하면 0을 리턴)
         if user_book_info_list == 0:
@@ -93,7 +93,7 @@ def inputData():
     # 업데이트 날짜가 오늘이 아니면 업데이트
     elif user_db_result[-1] != now_time():
         print("책 대출 기록을 업데이트합니다.")
-        user_book_info_list = book_list(id=id, pw=pw, ReturnData=3)
+        user_book_info_list = book_list(id=id, pw=pw, ReturnData=2)
         user_book_list = [item[1] for item in user_book_info_list]
         cur.execute("UPDATE StudentsData SET BookList = ?, CrawlingDate = ? WHERE StudentNumber = ?", (listTostr(user_book_info_list), now_time(), id))
         conn.commit()
