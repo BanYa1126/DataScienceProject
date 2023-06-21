@@ -82,9 +82,9 @@ def random_books(name):
         ran_book_rec=[]
         for book in books:
             if book[3] == name:
-                if len(ran_book_rec) < 5:
-                    ran_book_rec.append(book[0])
-                if len(ran_book_rec) == 5:
+                if len(ran_book_rec) < 3:
+                    ran_book_rec.append({book[2]:book[0]})
+                if len(ran_book_rec) == 3:
                     break
 
     return ran_book_rec
