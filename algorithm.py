@@ -78,7 +78,11 @@ def category(names):
     driver.close()     
 
 # 책 이름으로 추천 책 출력
-def random_books(name):
+def random_books(names):
+    number = 4
+    if type(names) is str:
+        names = [names]
+
     with open("database/book_info.csv", 'r', encoding='utf-8-sig') as file:
         reader = csv.reader(file)
         header = next(reader)
@@ -86,14 +90,19 @@ def random_books(name):
         books = list(reader)
         random.shuffle(books)
 
-        ran_book_rec=[]
-        for book in books:
-            if book[3] == name:
-                if len(ran_book_rec) < 3:
-                    ran_book_rec.append({book[2]:book[0]})
-                if len(ran_book_rec) == 3:
-                    break
+        ran_book_rec={}
+        rec_book_list=[]
+        for name in names:
+            for book in books:
+                if book[3] == name:
+                    if len(rec_book_list) < number:
+                        rec_book_list.append(book[0])
+                    elif len(rec_book_list) == number:
+                        break
+                ran_book_rec[name] = rec_book_list
+            rec_book_list=[]
 
+    print(ran_book_rec)
     return ran_book_rec
 
 # 책 카테고리를 알려주는 함수
