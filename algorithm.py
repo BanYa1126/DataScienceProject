@@ -128,7 +128,7 @@ def user_book_category(names):
 
         # 책 분야 확인
         book_category = driver.find_elements(By.CLASS_NAME, "btn_sub_depth")
-        book_category = book_category[len(book_category)-1].text
+        book_category = book_category[len(book_category)-2].text
         book_categorys[name] = book_category
     driver.close()
 
