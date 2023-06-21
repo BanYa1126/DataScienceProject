@@ -32,7 +32,7 @@
         {% for bookcode in bookinfos %}
         <br>
         <article class="grid">
-          <img src="{{ url_for('static', filename='images/' + bookcode[1] +'.jpg') }}" alt="Book Image"></img>
+          <img src="{{ url_for('static', filename='images/' + bookcode[1] +'.jpg') }}" style="width:150px; height:225px;" alt="Book Image"></img>
           <spane>
             <!-- 책 코드: {{ bookcode[0] }}<br> -->
             책 이름: {{ bookcode[1] }}<br>
