@@ -63,7 +63,8 @@ def inputData():
     user_db_result = cur.execute("SELECT * FROM StudentsData WHERE StudentNumber = ?", (id,)).fetchone()
     # print(f"user_db_result[-1]: {user_db_result[-1]}, now_time(): {now_time()}")
     if user_db_result == None:
-        user_book_info_list = book_list(id=id, pw=pw, ReturnData=3)
+        user_book_info_list = book_list(id=id, pw=pw)
+        print(user_book_info_list)
         # 크롤링에 실패하면 홈으로 리다이렉트(크롤러는 작동 중 오류가 발생하면 0을 리턴)
         if user_book_info_list == 0:
             print("웹 페이지 로딩 오류")
