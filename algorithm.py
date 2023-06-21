@@ -10,14 +10,21 @@ import time
 import csv
 
 import random
+import os
 
 # 책 정보를 csv파일로 작성
-def category(names): 
+def category(names):
+    try:
+        print("algorithm/category: database 폴더 생성")
+        os.mkdir("database/")
+    except:
+        print("algorithm/category: database 폴더가 이미 존재합니다.")
+
     driver = webdriver.Chrome()
     driver.get("https://www.kyobobook.co.kr/")
     driver.implicitly_wait(60)
 
-    with open('book_info.csv', 'w', encoding='utf-8-sig', newline='') as f:
+    with open('database/book_info.csv', 'w', encoding='utf-8-sig', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['name', 'author', 'category', 'from'])
 
@@ -72,7 +79,7 @@ def category(names):
 
 # 책 이름으로 추천 책 출력
 def random_books(name):
-    with open("book_info.csv", 'r', encoding='utf-8-sig') as file:
+    with open("database/book_info.csv", 'r', encoding='utf-8-sig') as file:
         reader = csv.reader(file)
         header = next(reader)
 

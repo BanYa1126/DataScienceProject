@@ -127,7 +127,7 @@ def inputData():
     end_time = time.time() - start_time
     print("총 걸린 시간: {}초\n".format(end_time))
     # 코드가 정상적으로 작동하면 SearchResult.html 페이지에 책 리스트 출력
-    return render_template("SearchResult.html", bookinfos=user_book_info_list, bookcategory=book_category, student_number=str(id), re_books="", loading_time=end_time)
+    return render_template("SearchResult.html", bookinfos=user_book_info_list, bookcategory=book_category, student_number=str(id), re_books=random_books(user_book_list), loading_time=end_time)
 
 # 이스터 에그, html 연습용
 @app.route("/EarthAndMoon")
